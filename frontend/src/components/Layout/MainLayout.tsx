@@ -1,4 +1,5 @@
 import { Box, Container, Typography, AppBar, Toolbar, Paper } from '@mui/material';
+import { useEffect } from 'react';
 import ExploreIcon from '@mui/icons-material/Explore';
 import { InputPanel } from '@/components/InputPanel/InputPanel';
 import { MatrixDisplay } from '@/components/MatrixDisplay/MatrixDisplay';
@@ -19,11 +20,24 @@ export function MainLayout() {
     stepBack,
     reset: resetAnimation,
     setSpeed,
+    goToStep,
   } = useAnimation(steps);
+
+  // Tự động hiển thị toàn bộ đường đi khi có steps mới (sau khi tính toán xong)
+  useEffect(() => {
+    if (steps.length > 0) {
+      // Hiển thị toàn bộ đường đi ngay sau khi tính toán xong
+      // Chỉ set nếu chưa hiển thị hoặc đang ở trạng thái reset
+      if (animationState.currentStepIndex === -1 || 
+          animationState.currentStepIndex < steps.length - 1) {
+        goToStep(steps.length - 1);
+      }
+    }
+  }, [steps.length, goToStep]); // Chỉ phụ thuộc vào steps.length để tránh loop
 
   const handleCalculate = (matrix: Matrix, params: InputParams) => {
     calculate(matrix, params);
-    resetAnimation();
+    // Không reset animation, để useEffect tự động hiển thị toàn bộ đường đi
   };
 
   const handleReset = () => {
@@ -50,7 +64,7 @@ export function MainLayout() {
       </AppBar>
 
       {/* Main Content */}
-      <Container maxWidth="xl" className="py-6">
+      <Container maxWidth="xl" className="pb-6!">
         {/* Description */}
         <Paper elevation={1} className="p-4! my-3! bg-white/80! backdrop-blur!">
           <Typography variant="body2" className="text-gray-700">
@@ -103,13 +117,6 @@ export function MainLayout() {
               onSpeedChange={setSpeed}
             />
           </Box>
-        </Box>
-
-        {/* Footer */}
-        <Box className="mt-8! text-center text-gray-500 text-sm">
-          <Typography variant="caption">
-            Treasure Hunt Visualization - Built with React + MUI + TailwindCSS
-          </Typography>
         </Box>
       </Container>
     </Box>

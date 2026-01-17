@@ -1,7 +1,6 @@
 import {
   Box,
   IconButton,
-  Slider,
   Typography,
   LinearProgress,
   Tooltip,
@@ -12,34 +11,25 @@ import PauseIcon from '@mui/icons-material/Pause';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import SpeedIcon from '@mui/icons-material/Speed';
 import type { AnimationControlsProps } from '@/types';
 
 export function AnimationControls({
   isPlaying,
   currentStepIndex,
   totalSteps,
-  speed,
+  speed, // eslint-disable-line @typescript-eslint/no-unused-vars
   onPlay,
   onPause,
   onStepForward,
   onStepBack,
   onReset,
-  onSpeedChange,
+  onSpeedChange, // eslint-disable-line @typescript-eslint/no-unused-vars
 }: AnimationControlsProps) {
   const progress =
     totalSteps > 0 ? ((currentStepIndex + 1) / totalSteps) * 100 : 0;
 
   const isAtStart = currentStepIndex < 0;
   const isAtEnd = currentStepIndex >= totalSteps - 1;
-
-  // Speed marks for slider
-  const speedMarks = [
-    { value: 2000, label: 'Chậm' },
-    { value: 1000, label: 'Bình thường' },
-    { value: 500, label: 'Nhanh' },
-    { value: 200, label: 'Rất nhanh' },
-  ];
 
   return (
     <Paper elevation={1} className="p-4! bg-gray-50">
@@ -119,33 +109,6 @@ export function AnimationControls({
             <SkipNextIcon />
           </IconButton>
         </Tooltip>
-      </Box>
-
-      {/* Speed slider */}
-      <Box className="px-2!">
-        <Box className="flex items-center gap-2! mb-1!">
-          <SpeedIcon fontSize="small" className="text-gray-500" />
-          <Typography variant="caption" className="text-gray-600">
-            Tốc độ: {speed}ms/bước
-          </Typography>
-        </Box>
-        <Slider
-          value={speed}
-          onChange={(_, value) => onSpeedChange(value as number)}
-          min={100}
-          max={2000}
-          step={100}
-          marks={speedMarks}
-          valueLabelDisplay="auto"
-          valueLabelFormat={(value) => `${value}ms`}
-          sx={{
-            '& .MuiSlider-markLabel': {
-              fontSize: '10px',
-            },
-          }}
-          // Invert direction so left = slow, right = fast
-          track="inverted"
-        />
       </Box>
     </Paper>
   );

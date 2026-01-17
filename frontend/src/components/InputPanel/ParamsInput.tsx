@@ -55,7 +55,7 @@ export function ParamsInput({
         />
 
         <TextField
-          label="p (số rương)"
+          label="p (rương kho báu)"
           type="number"
           value={params.p || ''}
           onChange={handleChange('p')}

@@ -33,7 +33,7 @@ export function ResultPanel({
 }: ResultPanelProps) {
   if (steps.length === 0) {
     return (
-      <Paper elevation={2} className="p-4! h-full flex items-center justify-center">
+      <Paper elevation={2} className="p-4! flex items-center justify-center">
         <Box className="text-center text-gray-500">
           <Typography variant="h6" className="mb-2!">
             Chưa có kết quả

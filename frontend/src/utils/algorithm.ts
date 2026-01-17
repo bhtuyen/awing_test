@@ -270,37 +270,80 @@ function simplifySqrt(value: number): { a: number; b: number } | null {
 }
 
 /**
- * Format số dưới dạng số nguyên hoặc căn bậc 2 với LaTeX
- * Ví dụ: 5 → "5", √2 → "\sqrt{2}", 2√3 → "2\sqrt{3}", 3.14159 → "3.141590"
+ * Kết quả format fuel
  */
-export function formatFuel(fuel: number, decimals: number = 6): string {
+export interface FormattedFuel {
+  latex: string; // LaTeX string hoặc số thường
+  approximate?: string; // Giá trị xấp xỉ (nếu có dạng căn)
+  isInteger: boolean; // Có phải số nguyên không
+  isSqrt: boolean; // Có phải dạng căn không
+}
+
+/**
+ * Format số dưới dạng số nguyên hoặc căn bậc 2 với LaTeX
+ * Trả về object chứa cả dạng căn và giá trị xấp xỉ
+ * Ví dụ: 5 → {latex: "5", isInteger: true}
+ *        √2 → {latex: "\\sqrt{2}", approximate: "1.41421", isSqrt: true}
+ *        2√3 → {latex: "2\\sqrt{3}", approximate: "3.46410", isSqrt: true}
+ */
+export function formatFuel(fuel: number, decimals: number = 5): FormattedFuel {
   // Kiểm tra số nguyên
   if (isInteger(fuel)) {
-    return Math.round(fuel).toString();
+    return {
+      latex: Math.round(fuel).toString(),
+      isInteger: true,
+      isSqrt: false,
+    };
   }
 
   // Thử đơn giản hóa thành dạng căn
   const simplified = simplifySqrt(fuel);
   if (simplified) {
     const { a, b } = simplified;
+    let latex: string;
+    
     if (a === 1 && b === 1) {
-      return '1';
+      return {
+        latex: '1',
+        isInteger: true,
+        isSqrt: false,
+      };
     } else if (a === 1) {
-      return `\\sqrt{${b}}`;
+      latex = `\\sqrt{${b}}`;
     } else if (b === 1) {
-      return a.toString();
+      return {
+        latex: a.toString(),
+        isInteger: true,
+        isSqrt: false,
+      };
     } else {
-      return `${a}\\sqrt{${b}}`;
+      latex = `${a}\\sqrt{${b}}`;
     }
+    
+    // Tính giá trị xấp xỉ với 5 số thập phân
+    const approximate = fuel.toFixed(5);
+    
+    return {
+      latex,
+      approximate,
+      isInteger: false,
+      isSqrt: true,
+    };
   }
 
   // Nếu không thể đơn giản hóa, hiển thị số thập phân
-  return fuel.toFixed(decimals);
+  return {
+    latex: fuel.toFixed(decimals),
+    isInteger: false,
+    isSqrt: false,
+  };
 }
 
 /**
- * Kiểm tra xem string có chứa LaTeX không
+ * Format số dưới dạng string đơn giản (tương thích với code cũ)
+ * @deprecated Sử dụng formatFuel() thay vì hàm này
  */
-export function isLatex(value: string): boolean {
-  return value.includes('\\sqrt');
+export function formatFuelSimple(fuel: number, decimals: number = 6): string {
+  const formatted = formatFuel(fuel, decimals);
+  return formatted.latex;
 }

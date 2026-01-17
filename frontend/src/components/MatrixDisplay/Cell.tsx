@@ -2,20 +2,6 @@ import { Box, Typography } from '@mui/material';
 import type { CellProps } from '@/types';
 import { PirateIcon } from './PirateIcon';
 
-// Tạo màu gradient dựa trên số rương
-function getCellColor(value: number, totalChests: number, isTreasure: boolean): string {
-  if (isTreasure) {
-    return '#fbbf24'; // Amber-400 for treasure
-  }
-  
-  // Gradient từ xanh nhạt đến xanh đậm
-  const hue = 200 + (value / totalChests) * 60; // 200-260 (blue range)
-  const saturation = 60 + (value / totalChests) * 20;
-  const lightness = 85 - (value / totalChests) * 25;
-  
-  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-}
-
 export function Cell({
   value,
   isPirateHere,
@@ -23,9 +9,20 @@ export function Cell({
   isTarget,
   isTreasure,
   isStart,
-  totalChests,
 }: Omit<CellProps, 'row' | 'col'>) {
-  const backgroundColor = getCellColor(value, totalChests, isTreasure);
+  // Xác định background color dựa trên trạng thái
+  let backgroundColor: string;
+  
+  if (isTreasure) {
+    // Kho báu: màu vàng/amber
+    backgroundColor = '#fbbf24';
+  } else if (isVisited) {
+    // Ô đã đi qua: màu xanh lá nhạt
+    backgroundColor = '#dcfce7'; // green-100
+  } else {
+    // Ô chưa đi qua: màu trắng/xám nhạt
+    backgroundColor = '#ffffff'; 
+  } 
   
   return (
     <Box
