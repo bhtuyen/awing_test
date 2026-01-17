@@ -11,10 +11,7 @@ export function euclideanDistance(p1: Position, p2: Position): number {
  * Tìm vị trí của tất cả các loại rương trong ma trận
  * Trả về Map với key là loại rương, value là mảng các vị trí có loại rương đó
  */
-export function findChestPositions(
-  matrix: Matrix,
-  p: number
-): Map<number, Position[]> {
+export function findChestPositions(matrix: Matrix, p: number): Map<number, Position[]> {
   const positions = new Map<number, Position[]>();
 
   // Khởi tạo mảng cho mỗi loại rương
@@ -42,13 +39,13 @@ export function findChestPositions(
  * Tính toán đường đi tối ưu sử dụng Dynamic Programming
  * Bài toán: Tìm đường đi ngắn nhất từ (1,1) qua các loại rương 1, 2, ..., p
  * Mỗi loại chỉ cần đi đến 1 ô (vì 1 rương đã cho chìa khóa để mở loại tiếp theo)
- * 
+ *
  * Thuật toán: DP qua các lớp
  * dp[k][i] = khoảng cách ngắn nhất để đến ô thứ i của loại k
  */
 export function calculatePath(matrix: Matrix, p: number): Step[] {
   const chestPositions = findChestPositions(matrix, p);
-  
+
   // Kiểm tra tất cả các loại rương đều tồn tại
   for (let chest = 1; chest <= p; chest++) {
     const positions = chestPositions.get(chest);
@@ -59,16 +56,16 @@ export function calculatePath(matrix: Matrix, p: number): Step[] {
 
   // Vị trí bắt đầu
   const startPos: Position = { row: 1, col: 1 };
-  
+
   // Giá trị ô (1,1) - hải tặc bắt đầu ở đây
   const startValue = matrix[0][0];
-  
+
   // Hải tặc bắt đầu với chìa khóa để mở rương loại 1
   // Phải mở theo thứ tự: 1 -> 2 -> ... -> p
   // Nếu ô (1,1) có giá trị 1, hải tặc đã ở rương 1, có thể mở ngay
   // => bắt đầu từ loại 2
   let startChest = 1;
-  
+
   if (startValue === 1) {
     // Hải tặc đang ở rương loại 1, đã mở xong
     // => bắt đầu từ loại 2
@@ -86,7 +83,7 @@ export function calculatePath(matrix: Matrix, p: number): Step[] {
   // Khởi tạo cho loại rương đầu tiên cần đến
   const firstPositions = chestPositions.get(startChest)!;
   const firstDp: { dist: number; prevChest: number; prevPosIndex: number }[] = [];
-  
+
   for (let i = 0; i < firstPositions.length; i++) {
     const pos = firstPositions[i];
     const dist = euclideanDistance(startPos, pos);
@@ -100,7 +97,7 @@ export function calculatePath(matrix: Matrix, p: number): Step[] {
     const currentPositions = chestPositions.get(chest)!;
     const prevPositions = chestPositions.get(prevChestLevel)!;
     const prevDp = dp.get(prevChestLevel)!;
-    
+
     const currentDp: { dist: number; prevChest: number; prevPosIndex: number }[] = [];
 
     for (let i = 0; i < currentPositions.length; i++) {
@@ -157,7 +154,7 @@ export function calculatePath(matrix: Matrix, p: number): Step[] {
 
   for (const { chest, posIndex } of path) {
     const toPos = chestPositions.get(chest)![posIndex];
-    
+
     // Bỏ qua nếu vị trí trùng với vị trí hiện tại
     if (fromPos.row === toPos.row && fromPos.col === toPos.col) {
       continue;
@@ -168,7 +165,7 @@ export function calculatePath(matrix: Matrix, p: number): Step[] {
       from: { ...fromPos },
       to: { ...toPos },
       chestNumber: chest,
-      distance,
+      distance
     });
 
     fromPos = toPos;
@@ -187,12 +184,7 @@ export function calculateTotalFuel(steps: Step[]): number {
 /**
  * Tạo GameState hoàn chỉnh từ ma trận
  */
-export function createGameState(
-  matrix: Matrix,
-  n: number,
-  m: number,
-  p: number
-): GameState {
+export function createGameState(matrix: Matrix, n: number, m: number, p: number): GameState {
   const allChestPositions = findChestPositions(matrix, p);
   const steps = calculatePath(matrix, p);
   const totalFuel = calculateTotalFuel(steps);
@@ -214,7 +206,7 @@ export function createGameState(
     p,
     steps,
     totalFuel,
-    chestPositions,
+    chestPositions
   };
 }
 
@@ -292,7 +284,7 @@ export function formatFuel(fuel: number, decimals: number = 5): FormattedFuel {
     return {
       latex: Math.round(fuel).toString(),
       isInteger: true,
-      isSqrt: false,
+      isSqrt: false
     };
   }
 
@@ -301,12 +293,12 @@ export function formatFuel(fuel: number, decimals: number = 5): FormattedFuel {
   if (simplified) {
     const { a, b } = simplified;
     let latex: string;
-    
+
     if (a === 1 && b === 1) {
       return {
         latex: '1',
         isInteger: true,
-        isSqrt: false,
+        isSqrt: false
       };
     } else if (a === 1) {
       latex = `\\sqrt{${b}}`;
@@ -314,20 +306,20 @@ export function formatFuel(fuel: number, decimals: number = 5): FormattedFuel {
       return {
         latex: a.toString(),
         isInteger: true,
-        isSqrt: false,
+        isSqrt: false
       };
     } else {
       latex = `${a}\\sqrt{${b}}`;
     }
-    
+
     // Tính giá trị xấp xỉ với 5 số thập phân
     const approximate = fuel.toFixed(5);
-    
+
     return {
       latex,
       approximate,
       isInteger: false,
-      isSqrt: true,
+      isSqrt: true
     };
   }
 
@@ -335,7 +327,7 @@ export function formatFuel(fuel: number, decimals: number = 5): FormattedFuel {
   return {
     latex: fuel.toFixed(decimals),
     isInteger: false,
-    isSqrt: false,
+    isSqrt: false
   };
 }
 

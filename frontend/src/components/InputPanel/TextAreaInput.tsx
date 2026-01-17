@@ -1,5 +1,5 @@
 import { TextField, Box, Typography } from '@mui/material';
-  
+
 interface TextAreaInputProps {
   value: string;
   onChange: (value: string) => void;
@@ -8,18 +8,12 @@ interface TextAreaInputProps {
   disabled?: boolean;
 }
 
-export function TextAreaInput({
-  value,
-  onChange,
-  n,
-  m,
-  disabled = false,
-}: TextAreaInputProps) {
+export function TextAreaInput({ value, onChange, n, m, disabled = false }: TextAreaInputProps) {
   const placeholder = generatePlaceholder(n, m);
 
   return (
-    <Box className="space-y-2!">
-      <Typography variant="subtitle2" className="text-gray-600">
+    <Box className='space-y-2!'>
+      <Typography variant='subtitle2' className='text-gray-600'>
         Nhập ma trận (mỗi hàng một dòng, các số cách nhau bởi dấu cách)
       </Typography>
 
@@ -31,16 +25,16 @@ export function TextAreaInput({
         disabled={disabled}
         placeholder={placeholder}
         fullWidth
-        variant="outlined"
+        variant='outlined'
         sx={{
           '& .MuiOutlinedInput-root': {
             fontFamily: 'monospace',
-            fontSize: '14px',
-          },
+            fontSize: '14px'
+          }
         }}
       />
 
-      <Typography variant="caption" className="text-gray-500 block">
+      <Typography variant='caption' className='text-gray-500 block'>
         Format: {n} hàng × {m} cột. Ví dụ: "1 2 3" cho một hàng 3 cột.
       </Typography>
     </Box>

@@ -25,7 +25,7 @@ export function PirateIcon({ size = 24, animated = true }: PirateIconProps) {
         alignItems: 'center',
         justifyContent: 'center',
         animation: animated ? `${bounceAnimation} 0.6s ease-in-out infinite` : 'none',
-        fontSize: size * 0.8,
+        fontSize: size * 0.8
       }}
     >
       🏴‍☠️

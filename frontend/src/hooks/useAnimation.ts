@@ -22,14 +22,12 @@ function createInitialState(): AnimationState {
     speed: DEFAULT_SPEED,
     piratePosition: { row: 1, col: 1 },
     visitedCells: new Set<string>(['1,1']),
-    completedSteps: [],
+    completedSteps: []
   };
 }
 
 export function useAnimation(steps: Step[]): UseAnimationReturn {
-  const [animationState, setAnimationState] = useState<AnimationState>(() =>
-    createInitialState()
-  );
+  const [animationState, setAnimationState] = useState<AnimationState>(() => createInitialState());
   const intervalRef = useRef<number | null>(null);
 
   // Calculate state for a given step index
@@ -39,7 +37,7 @@ export function useAnimation(steps: Step[]): UseAnimationReturn {
         return {
           piratePosition: { row: 1, col: 1 },
           visitedCells: new Set<string>(['1,1']),
-          completedSteps: [],
+          completedSteps: []
         };
       }
 
@@ -57,7 +55,7 @@ export function useAnimation(steps: Step[]): UseAnimationReturn {
       return {
         piratePosition,
         visitedCells,
-        completedSteps,
+        completedSteps
       };
     },
     [steps]
@@ -83,7 +81,7 @@ export function useAnimation(steps: Step[]): UseAnimationReturn {
           return {
             ...prev,
             currentStepIndex: nextStepIndex,
-            ...newState,
+            ...newState
           };
         });
       }, animationState.speed);
@@ -107,7 +105,7 @@ export function useAnimation(steps: Step[]): UseAnimationReturn {
         return {
           ...createInitialState(),
           speed: prev.speed,
-          isPlaying: true,
+          isPlaying: true
         };
       }
       return { ...prev, isPlaying: true };
@@ -129,7 +127,7 @@ export function useAnimation(steps: Step[]): UseAnimationReturn {
         ...prev,
         isPlaying: false,
         currentStepIndex: nextStepIndex,
-        ...newState,
+        ...newState
       };
     });
   }, [steps.length, calculateStateForStep]);
@@ -145,7 +143,7 @@ export function useAnimation(steps: Step[]): UseAnimationReturn {
         ...prev,
         isPlaying: false,
         currentStepIndex: nextStepIndex,
-        ...newState,
+        ...newState
       };
     });
   }, [calculateStateForStep]);
@@ -153,7 +151,7 @@ export function useAnimation(steps: Step[]): UseAnimationReturn {
   const reset = useCallback(() => {
     setAnimationState((prev) => ({
       ...createInitialState(),
-      speed: prev.speed,
+      speed: prev.speed
     }));
   }, []);
 
@@ -170,7 +168,7 @@ export function useAnimation(steps: Step[]): UseAnimationReturn {
         ...prev,
         isPlaying: false,
         currentStepIndex: stepIndex,
-        ...newState,
+        ...newState
       }));
     },
     [steps.length, calculateStateForStep]
@@ -184,6 +182,6 @@ export function useAnimation(steps: Step[]): UseAnimationReturn {
     stepBack,
     reset,
     setSpeed,
-    goToStep,
+    goToStep
   };
 }

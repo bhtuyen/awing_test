@@ -20,7 +20,7 @@ export function MainLayout() {
     stepBack,
     reset: resetAnimation,
     setSpeed,
-    goToStep,
+    goToStep
   } = useAnimation(steps);
 
   // Tự động hiển thị toàn bộ đường đi khi có steps mới (sau khi tính toán xong)
@@ -28,12 +28,11 @@ export function MainLayout() {
     if (steps.length > 0) {
       // Hiển thị toàn bộ đường đi ngay sau khi tính toán xong
       // Chỉ set nếu chưa hiển thị hoặc đang ở trạng thái reset
-      if (animationState.currentStepIndex === -1 || 
-          animationState.currentStepIndex < steps.length - 1) {
+      if (animationState.currentStepIndex === -1 || animationState.currentStepIndex < steps.length - 1) {
         goToStep(steps.length - 1);
       }
     }
-  }, [steps.length, goToStep]); // Chỉ phụ thuộc vào steps.length để tránh loop
+  }, [steps.length, goToStep, animationState.currentStepIndex]); // Chỉ phụ thuộc vào steps.length để tránh loop
 
   const handleCalculate = (matrix: Matrix, params: InputParams) => {
     calculate(matrix, params);
@@ -52,35 +51,34 @@ export function MainLayout() {
       : 0;
 
   return (
-    <Box className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
+    <Box className='min-h-screen bg-linear-to-br from-blue-50 to-indigo-100'>
       {/* Header */}
-      <AppBar position="sticky" className="bg-linear-to-r from-blue-600 to-indigo-700">
+      <AppBar position='sticky' className='bg-linear-to-r from-blue-600 to-indigo-700'>
         <Toolbar>
-          <ExploreIcon className="mr-3!" />
-          <Typography variant="h6" className="font-bold">
+          <ExploreIcon className='mr-3!' />
+          <Typography variant='h6' className='font-bold'>
             Treasure Hunt - Tìm Kho Báu
           </Typography>
         </Toolbar>
       </AppBar>
 
       {/* Main Content */}
-      <Container maxWidth="xl" className="pb-6!">
+      <Container maxWidth='xl' className='pb-6!'>
         {/* Description */}
-        <Paper elevation={1} className="p-4! my-3! bg-white/80! backdrop-blur!">
-          <Typography variant="body2" className="text-gray-700">
-            <strong>Bài toán:</strong> Đoàn hải tặc cần tìm đường đi ngắn nhất để lấy kho báu. 
-            Vùng biển là ma trận n×m hòn đảo, mỗi đảo có một rương đánh số từ 1 đến p. 
-            Rương x chứa chìa khóa cho rương x+1. <strong>Kho báu nằm trong rương số p</strong> (rương p chỉ xuất hiện đúng 1 lần). 
-            Để có đường đi đến kho báu, trên bản đồ cần phải có các rương từ 1 đến p-1 (mỗi loại ít nhất 1 lần). 
-            Hải tặc bắt đầu từ vị trí (1,1) với chìa khóa để mở rương loại 1. 
-            Khoảng cách giữa hai đảo được tính bằng công thức Euclidean.
+        <Paper elevation={1} className='p-4! my-3! bg-white/80! backdrop-blur!'>
+          <Typography variant='body2' className='text-gray-700'>
+            <strong>Bài toán:</strong> Đoàn hải tặc cần tìm đường đi ngắn nhất để lấy kho báu. Vùng biển là ma trận n×m
+            hòn đảo, mỗi đảo có một rương đánh số từ 1 đến p. Rương x chứa chìa khóa cho rương x+1.{' '}
+            <strong>Kho báu nằm trong rương số p</strong> (rương p chỉ xuất hiện đúng 1 lần). Để có đường đi đến kho
+            báu, trên bản đồ cần phải có các rương từ 1 đến p-1 (mỗi loại ít nhất 1 lần). Hải tặc bắt đầu từ vị trí
+            (1,1) với chìa khóa để mở rương loại 1. Khoảng cách giữa hai đảo được tính bằng công thức Euclidean.
           </Typography>
         </Paper>
 
         {/* Two-column layout */}
-        <Box className="grid grid-cols-1 lg:grid-cols-12 gap-6!">
+        <Box className='grid grid-cols-1 lg:grid-cols-12 gap-6!'>
           {/* Left column - Input */}
-          <Box className="lg:col-span-4">
+          <Box className='lg:col-span-4'>
             <InputPanel
               onCalculate={handleCalculate}
               onReset={handleReset}
@@ -90,7 +88,7 @@ export function MainLayout() {
           </Box>
 
           {/* Right column - Output */}
-          <Box className="lg:col-span-8 space-y-6!">
+          <Box className='lg:col-span-8 space-y-6!'>
             {/* Matrix Display */}
             <MatrixDisplay
               matrix={gameState?.matrix || []}

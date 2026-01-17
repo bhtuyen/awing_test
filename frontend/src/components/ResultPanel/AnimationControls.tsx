@@ -1,11 +1,4 @@
-import {
-  Box,
-  IconButton,
-  Typography,
-  LinearProgress,
-  Tooltip,
-  Paper,
-} from '@mui/material';
+import { Box, IconButton, Typography, LinearProgress, Tooltip, Paper } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
@@ -23,61 +16,50 @@ export function AnimationControls({
   onStepForward,
   onStepBack,
   onReset,
-  onSpeedChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+  onSpeedChange // eslint-disable-line @typescript-eslint/no-unused-vars
 }: AnimationControlsProps) {
-  const progress =
-    totalSteps > 0 ? ((currentStepIndex + 1) / totalSteps) * 100 : 0;
+  const progress = totalSteps > 0 ? ((currentStepIndex + 1) / totalSteps) * 100 : 0;
 
   const isAtStart = currentStepIndex < 0;
   const isAtEnd = currentStepIndex >= totalSteps - 1;
 
   return (
-    <Paper elevation={1} className="p-4! bg-gray-50">
-      <Typography variant="subtitle2" className="mb-3! font-semibold text-gray-700">
+    <Paper elevation={1} className='p-4! bg-gray-50'>
+      <Typography variant='subtitle2' className='mb-3! font-semibold text-gray-700'>
         Điều khiển Animation
       </Typography>
 
       {/* Progress bar */}
-      <Box className="mb-4!">
-        <Box className="flex justify-between text-sm text-gray-600 mb-1!">
+      <Box className='mb-4!'>
+        <Box className='flex justify-between text-sm text-gray-600 mb-1!'>
           <span>Tiến trình</span>
           <span>
             Bước {Math.max(0, currentStepIndex + 1)} / {totalSteps}
           </span>
         </Box>
         <LinearProgress
-          variant="determinate"
+          variant='determinate'
           value={progress}
-          className="h-2 rounded"
+          className='h-2 rounded'
           sx={{
             backgroundColor: '#e5e7eb',
             '& .MuiLinearProgress-bar': {
-              backgroundColor: '#3b82f6',
-            },
+              backgroundColor: '#3b82f6'
+            }
           }}
         />
       </Box>
 
       {/* Control buttons */}
-      <Box className="flex items-center justify-center gap-2! mb-4!">
-        <Tooltip title="Về đầu">
-          <IconButton
-            onClick={onReset}
-            disabled={isAtStart}
-            size="small"
-            className="bg-gray-200 hover:bg-gray-300"
-          >
+      <Box className='flex items-center justify-center gap-2! mb-4!'>
+        <Tooltip title='Về đầu'>
+          <IconButton onClick={onReset} disabled={isAtStart} size='small' className='bg-gray-200 hover:bg-gray-300'>
             <RestartAltIcon />
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="Bước trước">
-          <IconButton
-            onClick={onStepBack}
-            disabled={isAtStart}
-            size="small"
-            className="bg-gray-200 hover:bg-gray-300"
-          >
+        <Tooltip title='Bước trước'>
+          <IconButton onClick={onStepBack} disabled={isAtStart} size='small' className='bg-gray-200 hover:bg-gray-300'>
             <SkipPreviousIcon />
           </IconButton>
         </Tooltip>
@@ -86,26 +68,21 @@ export function AnimationControls({
           <IconButton
             onClick={isPlaying ? onPause : onPlay}
             disabled={isAtEnd && !isPlaying}
-            size="large"
-            className="bg-blue-500 text-white hover:bg-blue-600"
+            size='large'
+            className='bg-blue-500 text-white hover:bg-blue-600'
             sx={{
               '&.Mui-disabled': {
                 backgroundColor: '#9ca3af',
-                color: 'white',
-              },
+                color: 'white'
+              }
             }}
           >
             {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="Bước tiếp">
-          <IconButton
-            onClick={onStepForward}
-            disabled={isAtEnd}
-            size="small"
-            className="bg-gray-200 hover:bg-gray-300"
-          >
+        <Tooltip title='Bước tiếp'>
+          <IconButton onClick={onStepForward} disabled={isAtEnd} size='small' className='bg-gray-200 hover:bg-gray-300'>
             <SkipNextIcon />
           </IconButton>
         </Tooltip>

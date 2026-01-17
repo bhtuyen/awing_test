@@ -29,25 +29,23 @@ export function ResultPanel({
   onStepForward,
   onStepBack,
   onReset,
-  onSpeedChange,
+  onSpeedChange
 }: ResultPanelProps) {
   if (steps.length === 0) {
     return (
-      <Paper elevation={2} className="p-4! flex items-center justify-center">
-        <Box className="text-center text-gray-500">
-          <Typography variant="h6" className="mb-2!">
+      <Paper elevation={2} className='p-4! flex items-center justify-center'>
+        <Box className='text-center text-gray-500'>
+          <Typography variant='h6' className='mb-2!'>
             Chưa có kết quả
           </Typography>
-          <Typography variant="body2">
-            Nhập dữ liệu và nhấn "Tính toán" để xem kết quả
-          </Typography>
+          <Typography variant='body2'>Nhập dữ liệu và nhấn "Tính toán" để xem kết quả</Typography>
         </Box>
       </Paper>
     );
   }
 
   return (
-    <Box className="space-y-4!">
+    <Box className='space-y-4!'>
       <AnimationControls
         isPlaying={isPlaying}
         currentStepIndex={currentStepIndex}
@@ -61,11 +59,7 @@ export function ResultPanel({
         onSpeedChange={onSpeedChange}
       />
 
-      <StepList
-        steps={steps}
-        currentStepIndex={currentStepIndex}
-        totalFuel={totalFuel}
-      />
+      <StepList steps={steps} currentStepIndex={currentStepIndex} totalFuel={totalFuel} />
     </Box>
   );
 }

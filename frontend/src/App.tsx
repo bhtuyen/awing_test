@@ -8,32 +8,32 @@ import { MainLayout } from '@/components/Layout/MainLayout';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#3b82f6', // blue-500
+      main: '#3b82f6' // blue-500
     },
     secondary: {
-      main: '#6366f1', // indigo-500
-    },
+      main: '#6366f1' // indigo-500
+    }
   },
   typography: {
-    fontFamily: 'Roboto, sans-serif',
+    fontFamily: 'Roboto, sans-serif'
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
           textTransform: 'none',
-          fontWeight: 500,
-        },
-      },
+          fontWeight: 500
+        }
+      }
     },
     MuiPaper: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
-        },
-      },
-    },
-  },
+          borderRadius: 8
+        }
+      }
+    }
+  }
 });
 
 function App() {

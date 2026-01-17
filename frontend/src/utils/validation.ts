@@ -29,19 +29,14 @@ export function validateParams(params: InputParams): ValidationResult {
 
   return {
     isValid: errors.length === 0,
-    errors,
+    errors
   };
 }
 
 /**
  * Validate ma trận
  */
-export function validateMatrix(
-  matrix: Matrix,
-  n: number,
-  m: number,
-  p: number
-): ValidationResult {
+export function validateMatrix(matrix: Matrix, n: number, m: number, p: number): ValidationResult {
   const errors: string[] = [];
 
   // Kiểm tra kích thước ma trận
@@ -53,9 +48,7 @@ export function validateMatrix(
   // Kiểm tra số cột mỗi hàng
   for (let i = 0; i < matrix.length; i++) {
     if (matrix[i].length !== m) {
-      errors.push(
-        `Hàng ${i + 1} phải có ${m} cột, nhưng có ${matrix[i].length} cột`
-      );
+      errors.push(`Hàng ${i + 1} phải có ${m} cột, nhưng có ${matrix[i].length} cột`);
     }
   }
 
@@ -72,9 +65,7 @@ export function validateMatrix(
 
       // Kiểm tra giá trị hợp lệ
       if (!Number.isInteger(value) || value < 1 || value > p) {
-        errors.push(
-          `Giá trị tại ô (${i + 1}, ${j + 1}) phải là số nguyên từ 1 đến ${p}, nhưng là ${value}`
-        );
+        errors.push(`Giá trị tại ô (${i + 1}, ${j + 1}) phải là số nguyên từ 1 đến ${p}, nhưng là ${value}`);
         continue;
       }
 
@@ -96,18 +87,14 @@ export function validateMatrix(
   // Kiểm tra rương p (kho báu) phải xuất hiện đúng 1 lần
   const treasureCount = chestCount.get(p) || 0;
   if (treasureCount === 0) {
-    errors.push(
-      `Kho báu (rương số ${p}) không xuất hiện trong ma trận`
-    );
+    errors.push(`Kho báu (rương số ${p}) không xuất hiện trong ma trận`);
   } else if (treasureCount !== 1) {
-    errors.push(
-      `Kho báu (rương số ${p}) phải xuất hiện đúng 1 lần, nhưng xuất hiện ${treasureCount} lần`
-    );
+    errors.push(`Kho báu (rương số ${p}) phải xuất hiện đúng 1 lần, nhưng xuất hiện ${treasureCount} lần`);
   }
 
   return {
     isValid: errors.length === 0,
-    errors,
+    errors
   };
 }
 
@@ -129,7 +116,7 @@ export function parseMatrixFromText(
     if (lines.length !== n) {
       return {
         matrix: null,
-        error: `Cần ${n} hàng, nhưng nhập ${lines.length} hàng`,
+        error: `Cần ${n} hàng, nhưng nhập ${lines.length} hàng`
       };
     }
 
@@ -144,14 +131,14 @@ export function parseMatrixFromText(
       if (values.length !== m) {
         return {
           matrix: null,
-          error: `Hàng ${i + 1} cần ${m} giá trị, nhưng có ${values.length} giá trị`,
+          error: `Hàng ${i + 1} cần ${m} giá trị, nhưng có ${values.length} giá trị`
         };
       }
 
       if (values.some((v) => isNaN(v))) {
         return {
           matrix: null,
-          error: `Hàng ${i + 1} chứa giá trị không phải số`,
+          error: `Hàng ${i + 1} chứa giá trị không phải số`
         };
       }
 
@@ -162,7 +149,7 @@ export function parseMatrixFromText(
   } catch {
     return {
       matrix: null,
-      error: 'Không thể parse ma trận từ text',
+      error: 'Không thể parse ma trận từ text'
     };
   }
 }
