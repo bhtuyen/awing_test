@@ -1,4 +1,7 @@
-* {
+@import 'tailwindcss';
+*,
+::before,
+::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -7,4 +10,17 @@ body {
   font-family: 'Roboto', system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
-@import 'tailwindcss';
+*::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-gray-500);
+  border-radius: 9999px;
+} 
+
+*::-webkit-scrollbar-track {
+  background: var(--color-gray-100);
+  border-radius: 9999px;
+}
+
