@@ -4,6 +4,8 @@
     {
         MatrixEmpty,
         OutOfRange,
-        DimensionNotMatched
+        DimensionNotMatched,
+        ChestNotFound,
+        NotFound
     }
 }

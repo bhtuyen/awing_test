@@ -6,6 +6,7 @@ import type { Step } from '@/types';
 interface ResultPanelProps {
   steps: Step[];
   totalFuel: number;
+  treasureChestNumber: number; // Số loại rương (p)
   // Animation props
   isPlaying: boolean;
   currentStepIndex: number;
@@ -21,6 +22,7 @@ interface ResultPanelProps {
 export function ResultPanel({
   steps,
   totalFuel,
+  treasureChestNumber,
   isPlaying,
   currentStepIndex,
   speed,
@@ -59,7 +61,12 @@ export function ResultPanel({
         onSpeedChange={onSpeedChange}
       />
 
-      <StepList steps={steps} currentStepIndex={currentStepIndex} totalFuel={totalFuel} />
+      <StepList
+        steps={steps}
+        currentStepIndex={currentStepIndex}
+        totalFuel={totalFuel}
+        treasureChestNumber={treasureChestNumber}
+      />
     </Box>
   );
 }

@@ -1,15 +1,15 @@
 import { Box, Container, Typography, AppBar, Toolbar, Paper } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import ExploreIcon from '@mui/icons-material/Explore';
 import { InputPanel } from '@/components/InputPanel/InputPanel';
 import { MatrixDisplay } from '@/components/MatrixDisplay/MatrixDisplay';
 import { ResultPanel } from '@/components/ResultPanel/ResultPanel';
 import { useTreasureHunt } from '@/hooks/useTreasureHunt';
 import { useAnimation } from '@/hooks/useAnimation';
-import type { Matrix, InputParams } from '@/types';
+import type { Matrix, InputParams, GameState } from '@/types';
 
 export function MainLayout() {
-  const { gameState, isCalculating, error, calculate, reset } = useTreasureHunt();
+  const { gameState, isCalculating, error, calculate, reset, loadGameState } = useTreasureHunt();
 
   const steps = gameState?.steps || [];
   const {
@@ -23,32 +23,55 @@ export function MainLayout() {
     goToStep
   } = useAnimation(steps);
 
+  // Track previous steps length để chỉ auto-display khi có steps mới
+  const prevStepsLengthRef = useRef<number>(0);
+
   // Tự động hiển thị toàn bộ đường đi khi có steps mới (sau khi tính toán xong)
   useEffect(() => {
-    if (steps.length > 0) {
+    // Chỉ chạy khi steps.length thay đổi (có tính toán mới)
+    if (steps.length > 0 && steps.length !== prevStepsLengthRef.current) {
+      prevStepsLengthRef.current = steps.length;
       // Hiển thị toàn bộ đường đi ngay sau khi tính toán xong
-      // Chỉ set nếu chưa hiển thị hoặc đang ở trạng thái reset
-      if (animationState.currentStepIndex === -1 || animationState.currentStepIndex < steps.length - 1) {
-        goToStep(steps.length - 1);
-      }
+      goToStep(steps.length - 1);
     }
-  }, [steps.length, goToStep, animationState.currentStepIndex]); // Chỉ phụ thuộc vào steps.length để tránh loop
+  }, [steps.length, goToStep]);
 
   const handleCalculate = (matrix: Matrix, params: InputParams) => {
+    // Reset animation trước khi tính toán mới để xóa visitedCells cũ
+    resetAnimation();
+    prevStepsLengthRef.current = 0;
     calculate(matrix, params);
-    // Không reset animation, để useEffect tự động hiển thị toàn bộ đường đi
   };
 
   const handleReset = () => {
     reset();
     resetAnimation();
+    prevStepsLengthRef.current = 0;
   };
+
+  /**
+   * Xử lý khi load bản đồ từ history
+   */
+  const handleLoadFromHistory = useCallback(
+    (loadedGameState: GameState) => {
+      // Reset animation trước
+      resetAnimation();
+      prevStepsLengthRef.current = 0;
+      // Load game state mới
+      loadGameState(loadedGameState);
+    },
+    [loadGameState, resetAnimation]
+  );
 
   // Determine current chest target based on current step
   const currentChest =
     animationState.currentStepIndex >= 0 && steps.length > 0
       ? steps[animationState.currentStepIndex]?.chestNumber || 0
       : 0;
+
+  // Get current matrix and params for InputPanel
+  const currentMatrix = gameState?.matrix || null;
+  const currentParams = gameState ? { n: gameState.n, m: gameState.m, p: gameState.p } : null;
 
   return (
     <Box className='min-h-screen bg-linear-to-br from-blue-50 to-indigo-100'>
@@ -82,8 +105,11 @@ export function MainLayout() {
             <InputPanel
               onCalculate={handleCalculate}
               onReset={handleReset}
+              onLoadFromHistory={handleLoadFromHistory}
               isCalculating={isCalculating}
               error={error}
+              currentMatrix={currentMatrix}
+              currentParams={currentParams}
             />
           </Box>
 
@@ -104,6 +130,7 @@ export function MainLayout() {
             <ResultPanel
               steps={steps}
               totalFuel={gameState?.totalFuel || 0}
+              treasureChestNumber={gameState?.p || 0}
               isPlaying={animationState.isPlaying}
               currentStepIndex={animationState.currentStepIndex}
               speed={animationState.speed}

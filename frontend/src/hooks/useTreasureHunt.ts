@@ -9,6 +9,7 @@ interface UseTreasureHuntReturn {
   error: string | null;
   calculate: (matrix: Matrix, params: InputParams) => ValidationResult;
   reset: () => void;
+  loadGameState: (state: GameState) => void;
 }
 
 export function useTreasureHunt(): UseTreasureHuntReturn {
@@ -57,11 +58,20 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
     setIsCalculating(false);
   }, []);
 
+  /**
+   * Load gameState từ history (đã được tính toán sẵn)
+   */
+  const loadGameState = useCallback((state: GameState) => {
+    setError(null);
+    setGameState(state);
+  }, []);
+
   return {
     gameState,
     isCalculating,
     error,
     calculate,
-    reset
+    reset,
+    loadGameState
   };
 }

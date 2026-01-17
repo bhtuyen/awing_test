@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS pirate_treasures (
   treasure_chest_number int NOT NULL CHECK (1 <= treasure_chest_number AND treasure_chest_number <= 250000),
   map_data json NOT NULL,
   optimal_path json NOT NULL,
+  total_fuel double NOT NULL DEFAULT 0,
   created_date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_pirate_treasure_name (pirate_treasure_name)
 );

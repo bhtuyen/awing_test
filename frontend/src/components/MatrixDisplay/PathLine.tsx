@@ -68,7 +68,7 @@ export function PathLine({ steps, currentStepIndex, cellSize, gridGap }: PathLin
         className='animate-pulse'
       />
 
-      {/* Step markers */}
+      {/* Step markers - hiển thị số rương (chestNumber) thay vì số thứ tự bước */}
       {steps.slice(0, currentStepIndex + 1).map((step, index) => {
         const pos = getPixelPosition(step.to);
         return (
@@ -83,7 +83,7 @@ export function PathLine({ steps, currentStepIndex, cellSize, gridGap }: PathLin
               fill='white'
               fontWeight='bold'
             >
-              {index + 1}
+              {step.chestNumber}
             </text>
           </g>
         );

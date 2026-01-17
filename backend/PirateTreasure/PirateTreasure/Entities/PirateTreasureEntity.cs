@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PirateTreasuresApi.Entities
@@ -25,6 +25,11 @@ namespace PirateTreasuresApi.Entities
 
         [Required]
         public string optimal_path { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Tổng nhiên liệu đã tối ưu
+        /// </summary>
+        public double total_fuel { get; set; }
 
         public DateTime created_date { get; set; } = DateTime.Now;
     }

@@ -1,5 +1,6 @@
 using Microsoft.OpenApi;
 using PirateTreasuresApi.Abstractions;
+using PirateTreasuresApi.Middlewares;
 using PirateTreasuresApi.Repositories;
 using PirateTreasuresApi.Services;
 
@@ -12,7 +13,13 @@ namespace PirateTreasuresApi
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    // Cấu hình JSON serializer để trả về camelCase thay vì PascalCase
+                    options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.WriteIndented = true; // Format JSON đẹp hơn trong development
+                });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -65,6 +72,9 @@ namespace PirateTreasuresApi
             // Build the app
             var app = builder.Build();
 
+            // Global Exception Handler - đặt ở đầu pipeline để bắt tất cả exception
+            app.UseGlobalExceptionHandler();
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -79,12 +89,12 @@ namespace PirateTreasuresApi
 
             app.UseHttpsRedirection();
 
+            // Enable CORS - must be before UseAuthorization and MapControllers
+            app.UseCors("AllowAll");
+
             app.UseAuthorization();
 
             app.MapControllers();
-
-            // Enable CORS
-            app.UseCors("AllowAll");
 
             app.Run();
         }

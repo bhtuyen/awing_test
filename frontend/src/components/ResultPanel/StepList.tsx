@@ -6,7 +6,7 @@ import type { StepListProps } from '@/types';
 import { formatFuel } from '@/utils/algorithm';
 import { MathDisplay } from '@/components/MathDisplay/MathDisplay';
 
-export function StepList({ steps, currentStepIndex, totalFuel }: StepListProps) {
+export function StepList({ steps, currentStepIndex, totalFuel, treasureChestNumber }: StepListProps) {
   if (steps.length === 0) {
     return null;
   }
@@ -54,13 +54,14 @@ export function StepList({ steps, currentStepIndex, totalFuel }: StepListProps) 
               </ListItemIcon>
 
               <ListItemText
+                disableTypography
                 primary={
                   <Box className='flex items-center gap-2!'>
                     <span className='font-medium'>Bước {index + 1}</span>
                     <Chip
                       label={`Rương ${step.chestNumber}`}
                       size='small'
-                      color={step.chestNumber === steps.length ? 'warning' : 'default'}
+                      color={step.chestNumber === treasureChestNumber ? 'warning' : 'default'}
                       variant='outlined'
                     />
                   </Box>
