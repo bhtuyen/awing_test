@@ -1,4 +1,7 @@
 using Microsoft.OpenApi;
+using PirateTreasuresApi.Abstractions;
+using PirateTreasuresApi.Repositories;
+using PirateTreasuresApi.Services;
 
 namespace PirateTreasuresApi
 {
@@ -10,10 +13,14 @@ namespace PirateTreasuresApi
 
             // Add services to the container.
             builder.Services.AddControllers();
+
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 
+            // Configure Swagger
             builder.Services.AddSwaggerGen(options =>
             {
+                // Define the Swagger document
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Pirate Treasure API",
@@ -26,6 +33,7 @@ namespace PirateTreasuresApi
                     }
                 });
 
+                // Set the comments path for the Swagger JSON and UI.
                 var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlFilePath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
                 if (File.Exists(xmlFilePath))
@@ -34,8 +42,10 @@ namespace PirateTreasuresApi
                 }
             });
 
+            // Configure CORS to allow all origins, methods, and headers
             builder.Services.AddCors(options =>
             {
+                // Define a CORS policy
                 options.AddPolicy("AllowAll", builder =>
                 {
                     builder.AllowAnyOrigin()
@@ -44,11 +54,21 @@ namespace PirateTreasuresApi
                 });
             });
 
+            // Dependency Injection
+            builder.Services.AddScoped<IPirateTreasureRepo>(options =>
+            {
+                return new PirateTreasureRepo(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new Exception("Connection string not found"));
+            });
+
+            builder.Services.AddScoped<IPirateTreasureService, PirateTreasureService>();
+
+            // Build the app
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                // Enable middleware to serve generated Swagger as a JSON endpoint.
                 app.UseSwagger();
                 app.UseSwaggerUI(options =>
                 {
@@ -63,6 +83,7 @@ namespace PirateTreasuresApi
 
             app.MapControllers();
 
+            // Enable CORS
             app.UseCors("AllowAll");
 
             app.Run();
