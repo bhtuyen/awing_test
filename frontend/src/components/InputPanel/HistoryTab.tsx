@@ -163,7 +163,7 @@ export function HistoryTab({
 
       {/* Error message */}
       {error && (
-        <Alert severity='error' className='mb-3!' onClose={() => {}}>
+        <Alert severity='error' className='mb-3!' onClose={() => { }}>
           {error}
         </Alert>
       )}
@@ -215,6 +215,7 @@ export function HistoryTab({
                   className='rounded-lg! mx-2! mb-1!'
                 >
                   <ListItemText
+                    disableTypography
                     primary={
                       <Box className='flex items-center gap-2'>
                         <Typography variant='body2' className='font-medium'>
@@ -223,7 +224,7 @@ export function HistoryTab({
                       </Box>
                     }
                     secondary={
-                      <Box className='flex items-center gap-2 mt-1 flex-wrap'>
+                      <Box className='flex items-center gap-2 mt-1! flex-wrap'>
                         <Chip
                           label={`${item.mapRows}×${item.mapColumns}`}
                           size='small'
@@ -256,7 +257,7 @@ export function HistoryTab({
 
           {/* Chi tiết bản đồ được chọn */}
           {selectedItem && (
-            <Paper elevation={1} className='mt-3! p-3! bg-blue-50! flex-1 overflow-auto'>
+            <Paper elevation={1} className='mt-3! p-3! bg-blue-50! overflow-auto'>
               {/* Header chi tiết */}
               <Box className='flex items-center justify-between mb-2!'>
                 <Typography variant='subtitle2' className='font-semibold text-blue-800'>
